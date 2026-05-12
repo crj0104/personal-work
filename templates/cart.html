@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head}">
+  <title th:remove="all">购物车 - 美味订餐</title>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+
+<nav class="bg-white shadow-md sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <a href="/" class="text-2xl font-black text-brand-600 tracking-tight">🍽 美味订餐</a>
+      <div class="flex items-center gap-4">
+        <a href="/" class="text-gray-600 hover:text-brand-600 font-medium transition">← 继续选购</a>
+        <a href="/orders" class="text-gray-700 hover:text-brand-600 font-medium transition">📋 我的订单</a>
+        <a href="/logout" class="text-gray-500 hover:text-red-500 text-sm transition">退出</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div th:if="${error}" class="max-w-3xl mx-auto px-4 mt-4">
+  <div class="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm text-center" th:text="${error}"></div>
+</div>
+
+<div class="max-w-3xl mx-auto px-4 py-8">
+  <h1 class="text-3xl font-black text-gray-800 mb-8">🛒 我的购物车</h1>
+
+  <div th:if="${cart == null || cart.isEmpty()}" class="text-center py-20">
+    <div class="text-6xl mb-4">🛒</div>
+    <p class="text-gray-500 text-xl">购物车还是空的</p>
+    <a href="/" class="inline-block mt-4 bg-brand-500 text-white px-8 py-3 rounded-full font-bold hover:bg-brand-600 transition">去逛逛</a>
+  </div>
+
+  <div th:unless="${cart == null || cart.isEmpty()}">
+    <div class="space-y-4 mb-8">
+      <div th:each="item : ${cart}" class="bg-white rounded-2xl shadow-md p-4 flex items-center gap-4">
+        <img th:src="${item.productImageUrl}" th:alt="${item.productName}"
+             class="w-20 h-20 rounded-xl object-cover flex-shrink-0"/>
+        <div class="flex-1">
+          <h3 class="font-bold text-gray-800" th:text="${item.productName}"></h3>
+          <p class="text-brand-600 font-bold text-lg">¥<span th:text="${#numbers.formatDecimal(item.price, 0, 1)}"></span></p>
+        </div>
+        <form th:action="@{/cart/update}" method="post" class="flex items-center gap-2">
+          <input type="hidden" name="productId" th:value="${item.productId}"/>
+          <button type="submit" name="quantity" th:value="${item.quantity - 1}"
+                  class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold transition">−</button>
+          <span class="w-10 text-center font-bold text-lg" th:text="${item.quantity}"></span>
+          <button type="submit" name="quantity" th:value="${item.quantity + 1}"
+                  class="w-8 h-8 rounded-full bg-brand-100 hover:bg-brand-200 text-brand-600 font-bold transition">+</button>
+        </form>
+        <p class="text-brand-600 font-black text-xl min-w-[80px] text-right">
+          ¥<span th:text="${#numbers.formatDecimal(item.price * item.quantity, 0, 1)}"></span>
+        </p>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-md p-6">
+      <div class="flex items-center justify-between mb-6">
+        <span class="text-lg text-gray-600">合计</span>
+        <span class="text-3xl font-black text-brand-600" th:text="'¥' + ${#numbers.formatDecimal(total, 0, 2)}"></span>
+      </div>
+      <form th:action="@{/cart/checkout}" method="post">
+        <button type="submit"
+                class="w-full bg-brand-500 hover:bg-brand-600 text-white font-bold py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all active:scale-[0.98] text-xl">
+          立即下单
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

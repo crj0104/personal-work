@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<aside th:fragment="sidebar(active)">
+  <div class="p-6">
+    <h1 class="text-xl font-black tracking-tight">🍽 管理后台</h1>
+  </div>
+  <nav class="mt-4">
+    <a th:href="@{/admin}" th:classappend="${active == 'dashboard'} ? 'bg-orange-500 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'" class="block px-6 py-3 transition font-medium">📊 数据看板</a>
+    <a th:href="@{/admin/users}" th:classappend="${active == 'users'} ? 'bg-orange-500 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'" class="block px-6 py-3 transition font-medium">👥 用户管理</a>
+    <a th:href="@{/admin/products}" th:classappend="${active == 'products'} ? 'bg-orange-500 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'" class="block px-6 py-3 transition font-medium">🍕 商品管理</a>
+    <a th:href="@{/admin/orders}" th:classappend="${active == 'orders'} ? 'bg-orange-500 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'" class="block px-6 py-3 transition font-medium">📋 订单管理</a>
+    <a th:href="@{/logout}" class="block px-6 py-3 text-gray-400 hover:text-red-400 transition font-medium mt-8">退出登录</a>
+  </nav>
+</aside>
